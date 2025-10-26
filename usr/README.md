@@ -1,6 +1,6 @@
-# couldai_user_app
+# indiahub
 
-A new Flutter project.
+A new Flutter project that serves as a hub for your favorite apps and games.
 
 ## Getting Started
 
