@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class AppItem {
-  final String name;
-  final IconData icon;
-  final String packageName;
+class Seat {
+  final int seatNumber;
+  bool isBooked;
 
-  AppItem({required this.name, required this.icon, required this.packageName});
+  Seat({required this.seatNumber, this.isBooked = false});
 }
 
 class MyApp extends StatelessWidget {
@@ -19,84 +17,109 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'IndiaHub',
+      title: 'Awdesh Yadav Library',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.orange),
+        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: const MyHomePage(),
+      home: const LibraryHomePage(),
     );
   }
 }
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
+class LibraryHomePage extends StatefulWidget {
+  const LibraryHomePage({super.key});
 
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  State<LibraryHomePage> createState() => _LibraryHomePageState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  final List<AppItem> apps = [
-    AppItem(name: 'WhatsApp', icon: Icons.message, packageName: 'com.whatsapp'),
-    AppItem(name: 'Facebook', icon: Icons.facebook, packageName: 'com.facebook.katana'),
-    AppItem(name: 'Instagram', icon: Icons.camera_alt, packageName: 'com.instagram.android'),
-    AppItem(name: 'Twitter', icon: Icons.chat_bubble, packageName: 'com.twitter.android'),
-    AppItem(name: 'YouTube', icon: Icons.video_library, packageName: 'com.google.android.youtube'),
-    AppItem(name: 'Gmail', icon: Icons.email, packageName: 'com.google.android.gm'),
-    AppItem(name: 'Maps', icon: Icons.map, packageName: 'com.google.android.apps.maps'),
-    AppItem(name: 'Chrome', icon: Icons.web, packageName: 'com.android.chrome'),
-    AppItem(name: 'Spotify', icon: Icons.music_note, packageName: 'com.spotify.music'),
-    AppItem(name: 'Netflix', icon: Icons.movie, packageName: 'com.netflix.mediaclient'),
-    AppItem(name: 'Amazon', icon: Icons.shopping_cart, packageName: 'in.amazon.mShop.android.shopping'),
-    AppItem(name: 'Flipkart', icon: Icons.store, packageName: 'com.flipkart.android'),
-    AppItem(name: 'Paytm', icon: Icons.payment, packageName: 'net.one97.paytm'),
-    AppItem(name: 'PhonePe', icon: Icons.phone_android, packageName: 'com.phonepe.app'),
-    AppItem(name: 'GPay', icon: Icons.credit_card, packageName: 'com.google.android.apps.nbu.paisa.user'),
-    AppItem(name: 'Uber', icon: Icons.local_taxi, packageName: 'com.ubercab'),
-    AppItem(name: 'Ola', icon: Icons.directions_car, packageName: 'com.olacabs.customer'),
-    AppItem(name: 'Zomato', icon: Icons.restaurant, packageName: 'com.application.zomato'),
-    AppItem(name: 'Swiggy', icon: Icons.delivery_dining, packageName: 'in.swiggy.android'),
-    AppItem(name: 'LinkedIn', icon: Icons.work, packageName: 'com.linkedin.android'),
-    // Add 40 more apps
-    ...List.generate(40, (index) => AppItem(name: 'App ${index + 21}', icon: Icons.apps, packageName: 'com.example.app${index + 21}')),
-  ];
+class _LibraryHomePageState extends State<LibraryHomePage> {
+  final int totalSeats = 80;
+  late List<Seat> seats;
 
-  final List<AppItem> games = [
-    AppItem(name: 'Subway Surfers', icon: Icons.gamepad, packageName: 'com.kiloo.subwaysurf'),
-    AppItem(name: 'Candy Crush', icon: Icons.gamepad, packageName: 'com.king.candycrushsaga'),
-    AppItem(name: 'Temple Run 2', icon: Icons.gamepad, packageName: 'com.imangi.templerun2'),
-    AppItem(name: 'PUBG Mobile', icon: Icons.gamepad, packageName: 'com.tencent.ig'),
-    AppItem(name: 'Clash of Clans', icon: Icons.gamepad, packageName: 'com.supercell.clashofclans'),
-    AppItem(name: 'Ludo King', icon: Icons.gamepad, packageName: 'com.ludoking'),
-    AppItem(name: '8 Ball Pool', icon: Icons.gamepad, packageName: 'com.miniclip.eightballpool'),
-    AppItem(name: 'Free Fire', icon: Icons.gamepad, packageName: 'com.dts.freefireth'),
-    AppItem(name: 'Among Us', icon: Icons.gamepad, packageName: 'com.innersloth.spacemafia'),
-    AppItem(name: 'Asphalt 9', icon: Icons.gamepad, packageName: 'com.gameloft.android.ANMP.GloftA9HM'),
-    // Add 10 more games
-    ...List.generate(10, (index) => AppItem(name: 'Game ${index + 11}', icon: Icons.gamepad, packageName: 'com.example.game${index + 11}')),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    seats = List.generate(totalSeats, (index) => Seat(seatNumber: index + 1));
+  }
+
+  int get availableSeats => seats.where((seat) => !seat.isBooked).length;
+
+  void _toggleSeatBooking(int seatIndex) {
+    setState(() {
+      seats[seatIndex].isBooked = !seats[seatIndex].isBooked;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('IndiaHub'),
-          backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-          bottom: const TabBar(
-            tabs: [
-              Tab(icon: Icon(Icons.apps), text: 'Apps'),
-              Tab(icon: Icon(Icons.gamepad), text: 'Games'),
-            ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Awdesh Yadav Library'),
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(30.0),
+          child: Padding(
+            padding: const EdgeInsets.only(bottom: 8.0),
+            child: Text(
+              'Owner: Awdesh Yadav | Available Seats: $availableSeats / $totalSeats',
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
           ),
         ),
-        body: TabBarView(
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
           children: [
-            AppGridView(items: apps),
-            AppGridView(items: games),
+            Expanded(
+              child: GridView.builder(
+                itemCount: seats.length,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 8,
+                  crossAxisSpacing: 8.0,
+                  mainAxisSpacing: 8.0,
+                ),
+                itemBuilder: (context, index) {
+                  final seat = seats[index];
+                  return InkWell(
+                    onTap: () => _toggleSeatBooking(index),
+                    child: SeatWidget(seat: seat),
+                  );
+                },
+              ),
+            ),
+            const SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Row(
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                      color: Colors.green.shade200,
+                    ),
+                    const SizedBox(width: 8),
+                    const Text('Available'),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                      color: Colors.red.shade200,
+                    ),
+                    const SizedBox(width: 8),
+                    const Text('Booked'),
+                  ],
+                ),
+              ],
+            ),
+             const SizedBox(height: 20),
           ],
         ),
       ),
@@ -104,68 +127,31 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class AppGridView extends StatelessWidget {
-  final List<AppItem> items;
+class SeatWidget extends StatelessWidget {
+  final Seat seat;
 
-  const AppGridView({super.key, required this.items});
-
-  Future<void> _launchApp(BuildContext context, String packageName) async {
-    final Uri url = Uri.parse('android-app://$packageName');
-    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not launch $packageName')),
-      );
-    }
-  }
+  const SeatWidget({super.key, required this.seat});
 
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-      padding: const EdgeInsets.all(10.0),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 4,
-        crossAxisSpacing: 10.0,
-        mainAxisSpacing: 10.0,
+    return Container(
+      decoration: BoxDecoration(
+        color: seat.isBooked ? Colors.red.shade200 : Colors.green.shade200,
+        borderRadius: BorderRadius.circular(8.0),
+        border: Border.all(
+          color: seat.isBooked ? Colors.red : Colors.green,
+          width: 2,
+        ),
       ),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        return InkWell(
-          onTap: () => _launchApp(context, items[index].packageName),
-          borderRadius: BorderRadius.circular(40),
-          child: AppIcon(item: items[index]),
-        );
-      },
-    );
-  }
-}
-
-class AppIcon extends StatelessWidget {
-  final AppItem item;
-
-  const AppIcon({super.key, required this.item});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-          child: Icon(
-            item.icon,
-            size: 30,
-            color: Theme.of(context).colorScheme.onPrimaryContainer,
+      child: Center(
+        child: Text(
+          seat.seatNumber.toString(),
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 16,
           ),
         ),
-        const SizedBox(height: 8),
-        Text(
-          item.name,
-          textAlign: TextAlign.center,
-          overflow: TextOverflow.ellipsis,
-          style: const TextStyle(fontSize: 12),
-        ),
-      ],
+      ),
     );
   }
 }

@@ -1,5 +1,5 @@
-name: indiahub
-description: "A hub for all your favorite apps and games."
+name: awdesh_yadav_library
+description: "A seat booking application for Awdesh Yadav Library."
 publish_to: 'none' 
 version: 1.0.0+1
 
@@ -10,7 +10,6 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:

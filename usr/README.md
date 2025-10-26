@@ -1,6 +1,6 @@
-# indiahub
+# Awdesh Yadav Library
 
-A new Flutter project that serves as a hub for your favorite apps and games.
+A new Flutter project for a library seat booking application.
 
 ## Getting Started
 
